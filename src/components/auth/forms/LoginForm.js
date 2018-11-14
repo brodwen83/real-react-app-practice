@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import InlineError from "../../messages/InlineError";
+import PropTypes from "prop-types";
 import { Form, Button, Label } from "semantic-ui-react";
+
 import Validator from "validator";
 
 class LoginForm extends Component {
@@ -23,6 +24,9 @@ class LoginForm extends Component {
     console.log("submitted");
     const errors = this.validate(this.state.data);
     this.setState({ errors });
+    if (Object.keys(errors).length === 0) {
+      this.props.submit(this.state.data);
+    }
   };
 
   onFocus = e => {
@@ -101,5 +105,9 @@ class LoginForm extends Component {
     );
   }
 }
+
+LoginForm.propTypes = {
+  submit: PropTypes.func.isRequired
+};
 
 export default LoginForm;
