@@ -8,7 +8,7 @@ import "../styles.css";
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="ui container">
         <Route path="/" exact component={Homepage} />
         <Route path="/login" exact component={LogIn} />
       </div>
