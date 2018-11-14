@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import InlineError from "../../messages/InlineError";
 import { Form, Button, Label } from "semantic-ui-react";
 import Validator from "validator";
 
@@ -23,6 +24,7 @@ class LoginForm extends Component {
     const errors = this.validate(this.state.data);
     this.setState({ errors });
   };
+
   onFocus = e => {
     if (this.state.errors) {
       this.setState({
@@ -34,9 +36,13 @@ class LoginForm extends Component {
   validate = data => {
     const errors = {};
     if (!data.password) errors.password = "password can't be blank";
+    else if (data.password.length < 6 || data.password.length > 12)
+      errors.password = " password length should at least 6-12 long";
+
     if (Validator.isEmpty(data.email))
       errors.email = "email should not be empty";
     else if (!Validator.isEmail(data.email)) errors.email = "invalid email";
+
     return errors;
   };
 
@@ -54,7 +60,7 @@ class LoginForm extends Component {
           error.password: {errors.password}
         </pre>
         <Form onSubmit={this.onSubmit}>
-          <Form.Field>
+          <Form.Field error={!!errors.email}>
             <label htmlFor="email">Email</label>
             <input
               value={data.email}
@@ -71,7 +77,7 @@ class LoginForm extends Component {
               </Label>
             )}
           </Form.Field>
-          <Form.Field>
+          <Form.Field error={!!errors.password}>
             <label htmlFor="password">Password</label>
             <input
               value={data.password}
@@ -86,6 +92,7 @@ class LoginForm extends Component {
               <Label basic color="red" pointing>
                 {errors.password}
               </Label>
+              // <InlineError text={errors.password} />
             )}
           </Form.Field>
           <Button primary>Login</Button>
